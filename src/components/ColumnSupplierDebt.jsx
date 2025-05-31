@@ -1,0 +1,34 @@
+import formatCurrency from "../utils/formatCurrency";
+
+const ColumnSupplierDebt = () => {
+  return [
+    { title: "Mã công nợ", dataIndex: "id", key: "id" },
+    { title: "Mã nhà cung cấp", dataIndex: "supplier_id", key: "supplier_id" },
+    {
+      title: "Tên nhà cung cấp",
+      dataIndex: "supplier_name",
+      key: "supplier_name",
+    },
+    {
+      title: "Tổng tiền cần thanh toán",
+      dataIndex: "amount",
+      key: "amount",
+      render: (amount) => formatCurrency(amount),
+    },
+    {
+      title: "Số tiền đã thanh toán",
+      dataIndex: "paid_amount",
+      key: "paid_amount",
+      render: (pa) => formatCurrency(pa),
+    },
+    {
+      title: "Số tiền còn lại",
+      dataIndex: "remaining_amount",
+      key: "remaining_amount",
+      render: (ra) => formatCurrency(ra),
+    },
+    { title: "Trạng thái thanh toán", dataIndex: "status", key: "status" },
+  ];
+};
+
+export default ColumnSupplierDebt;

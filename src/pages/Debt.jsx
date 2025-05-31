@@ -13,7 +13,8 @@ export default function Debt() {
     setIsModalViewDetails,
   } = useDetailsDebtHandler();
   const { detailDebt, fetchViewDetails } = useDetailDebt(selectedDebt);
-  const { debt, fetchDebt } = useDebt(selectedDebt);
+  const { debt, fetchDebt, supplierDebt, fetchSupplierDebt } =
+    useDebt(selectedDebt);
   const {
     editingDebt,
     amount,
@@ -27,7 +28,11 @@ export default function Debt() {
   return (
     <>
       <h2>Quản lý công nợ</h2>
-      <TabsDebt debt={debt} handleViewDetails={handleViewDetails} />
+      <TabsDebt
+        supplierDebt={supplierDebt}
+        debt={debt}
+        handleViewDetails={handleViewDetails}
+      />
       <DebtModal
         isModalViewDetails={isModalViewDetails}
         setIsModalViewDetails={setIsModalViewDetails}

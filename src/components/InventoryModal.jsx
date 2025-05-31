@@ -92,6 +92,26 @@ const InventoryModal = ({
             </>
           )}
         </Form.List>
+        <Form.Item
+          name="paid_amount"
+          label="Số tiền đã thanh toán"
+          rules={[
+            {
+              type: "number",
+              min: 0,
+              message: "Số tiền phải lớn hơn hoặc bằng 0",
+            },
+          ]}
+        >
+          <InputNumber
+            placeholder="Số tiền đã thanh toán"
+            style={{ width: "100%" }}
+            formatter={(value) =>
+              `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            }
+            parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+          />
+        </Form.Item>
       </Form>
     </Modal>
   );
