@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 export default function useSupplierDebtHandler() {
-  const [selectedSupplierDebt, setSelectedSupplierDebt] = useState([]);
+  const [selectedSupplierDebt, setSelectedSupplierDebt] = useState(null);
   const [isOpenDetailDebtModal, setIsOpenDetailDebtModal] = useState(false);
 
   const handleViewSupplierDebtDetails = (sup_debt) => {

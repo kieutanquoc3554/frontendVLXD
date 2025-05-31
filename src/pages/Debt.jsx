@@ -6,6 +6,7 @@ import TabsDebt from "../components/TabsDebt";
 import DebtModal from "../components/DebtModal";
 import SupplierDebtModal from "../components/SupplierDebtModal";
 import useSupplierDebtHandler from "../hooks/handler/useSupplierDebtHandler";
+import useDetailSupplierDebt from "../hooks/api/useDetailSupplierDebt";
 
 export default function Debt() {
   const {
@@ -31,6 +32,7 @@ export default function Debt() {
     handleViewSupplierDebtDetails,
     setIsOpenDetailDebtModal,
   } = useSupplierDebtHandler();
+  const { detailSupplierDebt } = useDetailSupplierDebt(selectedSupplierDebt);
 
   return (
     <>
@@ -58,6 +60,7 @@ export default function Debt() {
         isOpenDetailDebtModal={isOpenDetailDebtModal}
         handleViewSupplierDebtDetails={handleViewSupplierDebtDetails}
         setIsOpenDetailDebtModal={setIsOpenDetailDebtModal}
+        detailSupplierDebt={detailSupplierDebt}
       />
     </>
   );
