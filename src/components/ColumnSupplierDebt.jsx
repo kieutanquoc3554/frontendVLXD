@@ -1,6 +1,9 @@
+import { Button, Flex } from "antd";
+import { debt } from "../utils/debt";
 import formatCurrency from "../utils/formatCurrency";
 
-const ColumnSupplierDebt = () => {
+const ColumnSupplierDebt = (handleViewSupplierDebtDetails) => {
+  const { getStatusDebt } = debt();
   return [
     { title: "Mã công nợ", dataIndex: "id", key: "id" },
     { title: "Mã nhà cung cấp", dataIndex: "supplier_id", key: "supplier_id" },
@@ -27,7 +30,27 @@ const ColumnSupplierDebt = () => {
       key: "remaining_amount",
       render: (ra) => formatCurrency(ra),
     },
-    { title: "Trạng thái thanh toán", dataIndex: "status", key: "status" },
+    {
+      title: "Trạng thái thanh toán",
+      dataIndex: "status",
+      key: "status",
+      render: (status) => getStatusDebt(status),
+    },
+    {
+      title: "Hành động",
+      key: "action",
+      render: (record) => (
+        <Flex align="center" gap={10}>
+          <Button
+            type="primary"
+            onClick={() => handleViewSupplierDebtDetails(record)}
+          >
+            Xem chi tiết
+          </Button>
+          <Button type="default">In công nợ</Button>
+        </Flex>
+      ),
+    },
   ];
 };
 

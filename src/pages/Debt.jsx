@@ -4,6 +4,8 @@ import useDetailDebt from "../hooks/api/useDetailDebt";
 import useDetailsDebtHandler from "../hooks/handler/useDetailsDebtHandler";
 import TabsDebt from "../components/TabsDebt";
 import DebtModal from "../components/DebtModal";
+import SupplierDebtModal from "../components/SupplierDebtModal";
+import useSupplierDebtHandler from "../hooks/handler/useSupplierDebtHandler";
 
 export default function Debt() {
   const {
@@ -13,8 +15,7 @@ export default function Debt() {
     setIsModalViewDetails,
   } = useDetailsDebtHandler();
   const { detailDebt, fetchViewDetails } = useDetailDebt(selectedDebt);
-  const { debt, fetchDebt, supplierDebt, fetchSupplierDebt } =
-    useDebt(selectedDebt);
+  const { debt, fetchDebt, supplierDebt } = useDebt(selectedDebt);
   const {
     editingDebt,
     amount,
@@ -24,6 +25,12 @@ export default function Debt() {
     handleSubmit,
     setPaymentMethod,
   } = useDebtHandler({ detailDebt, fetchDebt, fetchViewDetails });
+  const {
+    selectedSupplierDebt,
+    isOpenDetailDebtModal,
+    handleViewSupplierDebtDetails,
+    setIsOpenDetailDebtModal,
+  } = useSupplierDebtHandler();
 
   return (
     <>
@@ -32,6 +39,7 @@ export default function Debt() {
         supplierDebt={supplierDebt}
         debt={debt}
         handleViewDetails={handleViewDetails}
+        handleViewSupplierDebtDetails={handleViewSupplierDebtDetails}
       />
       <DebtModal
         isModalViewDetails={isModalViewDetails}
@@ -44,6 +52,12 @@ export default function Debt() {
         handleSubmit={handleSubmit}
         setPaymentMethod={setPaymentMethod}
         detailDebt={detailDebt}
+      />
+      <SupplierDebtModal
+        selectedSupplierDebt={selectedSupplierDebt}
+        isOpenDetailDebtModal={isOpenDetailDebtModal}
+        handleViewSupplierDebtDetails={handleViewSupplierDebtDetails}
+        setIsOpenDetailDebtModal={setIsOpenDetailDebtModal}
       />
     </>
   );
