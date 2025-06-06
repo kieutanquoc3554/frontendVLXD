@@ -18,6 +18,7 @@ import Categories from "./pages/Categories.jsx";
 import Cat from "./pages/Cat.jsx";
 import Order from "./pages/Order.jsx";
 import Debt from "./pages/Debt.jsx";
+import Bill from "./pages/Bill.jsx";
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
               <Route path="order" element={<Order />}></Route>
               <Route path="cat" element={<Cat />}></Route>
               <Route path="debt" element={<Debt />}></Route>
+              <Route path="bill" element={<Bill />}></Route>
               <Route index element={<Navigate to="/products" />} />
             </Route>
           </Route>

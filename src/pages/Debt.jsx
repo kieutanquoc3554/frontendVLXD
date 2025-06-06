@@ -4,6 +4,9 @@ import useDetailDebt from "../hooks/api/useDetailDebt";
 import useDetailsDebtHandler from "../hooks/handler/useDetailsDebtHandler";
 import TabsDebt from "../components/TabsDebt";
 import DebtModal from "../components/DebtModal";
+import SupplierDebtModal from "../components/SupplierDebtModal";
+import useSupplierDebtHandler from "../hooks/handler/useSupplierDebtHandler";
+import useDetailSupplierDebt from "../hooks/api/useDetailSupplierDebt";
 
 export default function Debt() {
   const {
@@ -13,7 +16,7 @@ export default function Debt() {
     setIsModalViewDetails,
   } = useDetailsDebtHandler();
   const { detailDebt, fetchViewDetails } = useDetailDebt(selectedDebt);
-  const { debt, fetchDebt } = useDebt(selectedDebt);
+  const { debt, fetchDebt, supplierDebt } = useDebt(selectedDebt);
   const {
     editingDebt,
     amount,
@@ -23,11 +26,27 @@ export default function Debt() {
     handleSubmit,
     setPaymentMethod,
   } = useDebtHandler({ detailDebt, fetchDebt, fetchViewDetails });
+  const {
+    selectedSupplierDebt,
+    isOpenDetailDebtModal,
+    handleViewSupplierDebtDetails,
+    setIsOpenDetailDebtModal,
+    isOpenPaySupplierDebt,
+    handlePaySupplierDebt,
+    setIsOpenPaySupplierDebt,
+  } = useSupplierDebtHandler({});
+  const { detailSupplierDebt, fetchSupplierDebtDetail } =
+    useDetailSupplierDebt(selectedSupplierDebt);
 
   return (
     <>
       <h2>Quản lý công nợ</h2>
-      <TabsDebt debt={debt} handleViewDetails={handleViewDetails} />
+      <TabsDebt
+        supplierDebt={supplierDebt}
+        debt={debt}
+        handleViewDetails={handleViewDetails}
+        handleViewSupplierDebtDetails={handleViewSupplierDebtDetails}
+      />
       <DebtModal
         isModalViewDetails={isModalViewDetails}
         setIsModalViewDetails={setIsModalViewDetails}
@@ -39,6 +58,17 @@ export default function Debt() {
         handleSubmit={handleSubmit}
         setPaymentMethod={setPaymentMethod}
         detailDebt={detailDebt}
+      />
+      <SupplierDebtModal
+        selectedSupplierDebt={selectedSupplierDebt}
+        isOpenDetailDebtModal={isOpenDetailDebtModal}
+        handleViewSupplierDebtDetails={handleViewSupplierDebtDetails}
+        setIsOpenDetailDebtModal={setIsOpenDetailDebtModal}
+        detailSupplierDebt={detailSupplierDebt}
+        isOpenPaySupplierDebt={isOpenPaySupplierDebt}
+        handlePaySupplierDebt={handlePaySupplierDebt}
+        setIsOpenPaySupplierDebt={setIsOpenPaySupplierDebt}
+        fetchSupplierDebtDetail={fetchSupplierDebtDetail}
       />
     </>
   );

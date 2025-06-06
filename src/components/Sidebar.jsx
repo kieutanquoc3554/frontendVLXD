@@ -14,6 +14,7 @@ import {
 import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { ThemeContext } from "../context/ThemeContext";
+import { FaMoneyBillWave } from "react-icons/fa";
 
 const { Sider } = Layout;
 
@@ -71,7 +72,8 @@ const Sidebar = () => {
         },
         {
           key: "8",
-          label: "Hóa đơn & Thanh toán",
+          icon: <FaMoneyBillWave />,
+          label: <Link to="/bill">Danh sách hoá đơn</Link>,
         },
         {
           key: "9",

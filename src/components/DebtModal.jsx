@@ -3,10 +3,8 @@ import ColumnProductDebt from "./ColumnProductDebt";
 import ColumnHistoryDebt from "./ColumnHistoryDebt";
 import DebtDescriptions from "./DebtDescriptions";
 import pdfMake from "pdfmake/build/pdfmake";
-import pdfFonts from "pdfmake/build/vfs_fonts";
 import moment from "moment";
 import formatCurrency from "../utils/formatCurrency";
-// pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 const DebtModal = ({
   isModalViewDetails,

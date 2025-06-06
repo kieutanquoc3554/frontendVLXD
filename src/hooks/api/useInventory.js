@@ -105,7 +105,6 @@ export default function useInventory() {
       form.resetFields();
       fetchInventory();
       fetchInventoryLogs();
-      // console.log(values);
     } catch (error) {
       console.error(error);
       message.error("Lỗi khi lưu phiếu nhập");
