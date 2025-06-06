@@ -4,6 +4,7 @@ import formatCurrency from "../utils/formatCurrency";
 
 const ColumnSupplierDebt = (handleViewSupplierDebtDetails) => {
   const { getStatusDebt } = debt();
+
   return [
     { title: "Mã công nợ", dataIndex: "id", key: "id" },
     { title: "Mã nhà cung cấp", dataIndex: "supplier_id", key: "supplier_id" },
@@ -47,7 +48,6 @@ const ColumnSupplierDebt = (handleViewSupplierDebtDetails) => {
           >
             Xem chi tiết
           </Button>
-          <Button type="default">In công nợ</Button>
         </Flex>
       ),
     },

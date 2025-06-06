@@ -31,8 +31,12 @@ export default function Debt() {
     isOpenDetailDebtModal,
     handleViewSupplierDebtDetails,
     setIsOpenDetailDebtModal,
-  } = useSupplierDebtHandler();
-  const { detailSupplierDebt } = useDetailSupplierDebt(selectedSupplierDebt);
+    isOpenPaySupplierDebt,
+    handlePaySupplierDebt,
+    setIsOpenPaySupplierDebt,
+  } = useSupplierDebtHandler({});
+  const { detailSupplierDebt, fetchSupplierDebtDetail } =
+    useDetailSupplierDebt(selectedSupplierDebt);
 
   return (
     <>
@@ -61,6 +65,10 @@ export default function Debt() {
         handleViewSupplierDebtDetails={handleViewSupplierDebtDetails}
         setIsOpenDetailDebtModal={setIsOpenDetailDebtModal}
         detailSupplierDebt={detailSupplierDebt}
+        isOpenPaySupplierDebt={isOpenPaySupplierDebt}
+        handlePaySupplierDebt={handlePaySupplierDebt}
+        setIsOpenPaySupplierDebt={setIsOpenPaySupplierDebt}
+        fetchSupplierDebtDetail={fetchSupplierDebtDetail}
       />
     </>
   );

@@ -1,11 +1,19 @@
-import { Modal, Descriptions, Table, Divider, Tag } from "antd";
+import { Modal, Descriptions, Table, Divider, Tag, Input, message } from "antd";
+import ActionButtonSupplierDebt from "./ActionButtonSupplierDebt";
+import useSupplierDebtHandler from "../hooks/handler/useSupplierDebtHandler";
 
 const SupplierDebtModal = ({
   selectedSupplierDebt,
   isOpenDetailDebtModal,
   setIsOpenDetailDebtModal,
   detailSupplierDebt,
+  isOpenPaySupplierDebt,
+  handlePaySupplierDebt,
+  setIsOpenPaySupplierDebt,
+  fetchSupplierDebtDetail,
 }) => {
+  const { paymentAmount, setPaymentAmount, handleSubmit, exportToPDF } =
+    useSupplierDebtHandler();
   if (!selectedSupplierDebt || !detailSupplierDebt) return null;
 
   const columnsItems = [
@@ -70,71 +78,131 @@ const SupplierDebtModal = ({
   };
 
   return (
-    <Modal
-      title="Chi tiết công nợ"
-      open={isOpenDetailDebtModal}
-      onCancel={() => setIsOpenDetailDebtModal(false)}
-      footer={null}
-      width={900}
-      bodyStyle={{ maxHeight: "70vh", overflowY: "auto" }}
-    >
-      <Descriptions
-        bordered
-        column={2}
-        size="small"
-        title="Thông tin nhà cung cấp"
+    <>
+      <Modal
+        title="Chi tiết công nợ"
+        open={isOpenDetailDebtModal}
+        onCancel={() => setIsOpenDetailDebtModal(false)}
+        footer={null}
+        width={900}
+        bodyStyle={{ maxHeight: "70vh", overflowY: "auto" }}
       >
-        <Descriptions.Item label="Tên">
-          {detailSupplierDebt.supplier_name}
-        </Descriptions.Item>
-        <Descriptions.Item label="SĐT">
-          {detailSupplierDebt.phone}
-        </Descriptions.Item>
-        <Descriptions.Item label="Ngày nhập hàng">
-          {new Date(detailSupplierDebt.created_at).toLocaleDateString()}
-        </Descriptions.Item>
-        <Descriptions.Item label="Ghi chú">
-          {detailSupplierDebt.note}
-        </Descriptions.Item>
-        <Descriptions.Item label="Tổng tiền">
-          {Number(detailSupplierDebt.amount).toLocaleString()} đ
-        </Descriptions.Item>
-        <Descriptions.Item label="Đã trả">
-          {Number(detailSupplierDebt.paid_amount).toLocaleString()} đ
-        </Descriptions.Item>
-        <Descriptions.Item label="Còn nợ">
-          <b style={{ color: "red" }}>
-            {Number(detailSupplierDebt.remaining_amount).toLocaleString()} đ
-          </b>
-        </Descriptions.Item>
-        <Descriptions.Item label="Trạng thái">
-          {getStatusTag(detailSupplierDebt.status)}
-        </Descriptions.Item>
-      </Descriptions>
+        <ActionButtonSupplierDebt
+          exportToPDF={exportToPDF}
+          detailSupplierDebt={detailSupplierDebt}
+          handlePaySupplierDebt={handlePaySupplierDebt}
+        />
+        <Descriptions
+          bordered
+          column={2}
+          size="small"
+          title="Thông tin nhà cung cấp"
+        >
+          <Descriptions.Item label="Tên">
+            {detailSupplierDebt.supplier_name}
+          </Descriptions.Item>
+          <Descriptions.Item label="SĐT">
+            {detailSupplierDebt.phone}
+          </Descriptions.Item>
+          <Descriptions.Item label="Ngày nhập hàng">
+            {new Date(detailSupplierDebt.created_at).toLocaleDateString()}
+          </Descriptions.Item>
+          <Descriptions.Item label="Ghi chú">
+            {detailSupplierDebt.note}
+          </Descriptions.Item>
+          <Descriptions.Item label="Tổng tiền">
+            {Number(detailSupplierDebt.amount).toLocaleString()} đ
+          </Descriptions.Item>
+          <Descriptions.Item label="Đã trả">
+            {Number(detailSupplierDebt.paid_amount).toLocaleString()} đ
+          </Descriptions.Item>
+          <Descriptions.Item label="Còn nợ">
+            <b style={{ color: "red" }}>
+              {Number(detailSupplierDebt.remaining_amount).toLocaleString()} đ
+            </b>
+          </Descriptions.Item>
+          <Descriptions.Item label="Trạng thái">
+            {getStatusTag(detailSupplierDebt.status)}
+          </Descriptions.Item>
+        </Descriptions>
 
-      <Divider orientation="left">Danh sách sản phẩm</Divider>
-      <Table
-        dataSource={detailSupplierDebt.items}
-        columns={columnsItems}
-        pagination={false}
-        rowKey={(record) => record.id}
-        size="small"
-      />
+        <Divider orientation="left">Danh sách sản phẩm</Divider>
+        <Table
+          dataSource={detailSupplierDebt.items}
+          columns={columnsItems}
+          pagination={false}
+          rowKey={(record) => record.id}
+          size="small"
+        />
 
-      {Array.isArray(detailSupplierDebt.payments) &&
-        detailSupplierDebt.payments.length > 0 && (
-          <>
-            <Divider orientation="left">Lịch sử thanh toán</Divider>
-            <Table
-              dataSource={detailSupplierDebt.payments}
-              columns={columnsPayments}
-              pagination={false}
-              rowKey={(record) => record.id}
-              size="small"
+        {Array.isArray(detailSupplierDebt.payments) &&
+          detailSupplierDebt.payments.length > 0 && (
+            <>
+              <Divider orientation="left">Lịch sử thanh toán</Divider>
+              <Table
+                dataSource={detailSupplierDebt.payments}
+                columns={columnsPayments}
+                pagination={false}
+                rowKey={(record) => record.id}
+                size="small"
+              />
+            </>
+          )}
+      </Modal>
+      <Modal
+        title="Thanh toán đơn hàng"
+        open={isOpenPaySupplierDebt}
+        onCancel={() => setIsOpenPaySupplierDebt(false)}
+        okText="Xác nhận thanh toán"
+        cancelText="Huỷ"
+        width={700}
+        bodyStyle={{ maxHeight: "70vh", overflowY: "auto" }}
+        onOk={async () => {
+          handleSubmit(detailSupplierDebt);
+          try {
+            await fetchSupplierDebtDetail();
+          } catch (err) {
+            console.error("Lỗi khi fetch lại công nợ:", err);
+            message.warning(
+              "Đã thanh toán nhưng không thể cập nhật lại dữ liệu công nợ"
+            );
+          }
+        }}
+      >
+        <Descriptions bordered column={2} size="small">
+          <Descriptions.Item label="Tên">
+            {detailSupplierDebt.supplier_name}
+          </Descriptions.Item>
+          <Descriptions.Item label="SĐT">
+            {detailSupplierDebt.phone}
+          </Descriptions.Item>
+          <Descriptions.Item label="Ngày nhập hàng">
+            {new Date(detailSupplierDebt.created_at).toLocaleDateString()}
+          </Descriptions.Item>
+          <Descriptions.Item label="Ghi chú">
+            {detailSupplierDebt.note}
+          </Descriptions.Item>
+          <Descriptions.Item label="Tổng tiền">
+            {Number(detailSupplierDebt.amount).toLocaleString()} đ
+          </Descriptions.Item>
+          <Descriptions.Item label="Đã trả">
+            {Number(detailSupplierDebt.paid_amount).toLocaleString()} đ
+          </Descriptions.Item>
+          <Descriptions.Item label="Còn nợ">
+            <b style={{ color: "red" }}>
+              {Number(detailSupplierDebt.remaining_amount).toLocaleString()} đ
+            </b>
+          </Descriptions.Item>
+          <Descriptions.Item label="Số tiền thanh toán">
+            <Input
+              value={paymentAmount}
+              onChange={(e) => setPaymentAmount(e.target.value)}
+              placeholder="Nhập số tiền thanh toán"
             />
-          </>
-        )}
-    </Modal>
+          </Descriptions.Item>
+        </Descriptions>
+      </Modal>
+    </>
   );
 };
 
