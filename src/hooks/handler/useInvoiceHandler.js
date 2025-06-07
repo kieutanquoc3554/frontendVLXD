@@ -225,6 +225,7 @@ export default function useInvoiceHandler({
     // Thiết lập cột
     sheet.columns = [
       { header: "Mã hoá đơn", key: "id", width: 15 },
+      { header: "Mã tham chiếu", key: "referenceId", width: 15 },
       { header: "Tên khách hàng/nhà cung cấp", key: "name", width: 40 },
       { header: "Ngày thanh toán", key: "paymentDate", width: 20 },
       { header: "Tổng tiền", key: "totalAmount", width: 15 },
@@ -259,6 +260,7 @@ export default function useInvoiceHandler({
     data.forEach((item) => {
       sheet.addRow({
         id: item.id?.toString() || "",
+        referenceId: item.referenceId?.toString() || "",
         name: item.name || "",
         paymentDate: moment(item.paymentDate).format("HH:mm DD/MM/YYYY") || "",
         totalAmount: formatCurrency(item.totalAmount) || 0,

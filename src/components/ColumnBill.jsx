@@ -20,9 +20,15 @@ const ColumnBill = () => {
       render: (total) => formatCurrency(total),
     },
     {
-      title: "Đã thanh toán",
+      title: "Số tiền thanh toán",
       dataIndex: "paidAmount",
       key: "paidAmount",
+      render: (paid) => formatCurrency(paid),
+    },
+    {
+      title: "Tổng số tiền đã thanh toán",
+      dataIndex: "totalPaidAmount",
+      key: "totalPaidAmount",
       render: (paid) => formatCurrency(paid),
     },
     {
@@ -45,7 +51,7 @@ const ColumnBill = () => {
     },
     { title: "Mã tham chiếu", dataIndex: "referenceId", key: "referenceId" },
     {
-      title: "Hành động",
+      title: "Xem chi tiết",
       key: "action",
       render: (record) => (
         <>
