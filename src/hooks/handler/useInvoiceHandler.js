@@ -5,7 +5,8 @@ import pdfMake from "pdfmake/build/pdfmake";
 import formatCurrency from "../../utils/formatCurrency";
 import moment from "moment";
 import { message } from "antd";
-import * as XLSX from "xlsx";
+import ExcelJS from "exceljs";
+import { saveAs } from "file-saver";
 
 export default function useInvoiceHandler({
   selectedTab,
@@ -210,60 +211,82 @@ export default function useInvoiceHandler({
   };
 
   const handleExportExcel = () => {
-    const data = getDataForSelectedTab();
+    const data = getDataForSelectedTab()
+      .slice()
+      .sort((a, b) => a.id - b.id);
     if (!data.length) {
       message.error("Không có dữ liệu để xuất file Excel");
       return;
     }
-    const header = [
-      "Mã hoá đơn",
-      "Tên khách hàng/nhà cung cấp",
-      "Ngày thanh toán",
-      "Tổng tiền",
-      "Đã trả",
-      "Còn lại",
-      "Ghi chú",
+
+    const workbook = new ExcelJS.Workbook();
+    const sheet = workbook.addWorksheet("Danh sách hoá đơn");
+
+    // Thiết lập cột
+    sheet.columns = [
+      { header: "Mã hoá đơn", key: "id", width: 15 },
+      { header: "Tên khách hàng/nhà cung cấp", key: "name", width: 40 },
+      { header: "Ngày thanh toán", key: "paymentDate", width: 20 },
+      { header: "Tổng tiền", key: "totalAmount", width: 15 },
+      { header: "Đã trả", key: "paidAmount", width: 15 },
+      { header: "Còn lại", key: "remainingAmount", width: 15 },
+      { header: "Ghi chú", key: "note", width: 30 },
     ];
-    const worksheetData = [
-      header,
-      ...data.map((item) => [
-        item.id?.toString() || "",
-        item.name || "",
-        moment(item.paymentDate).format("HH:mm DD/MM/YYYY") || "",
-        formatCurrency(item.totalAmount) || 0,
-        formatCurrency(item.paidAmount) || 0,
-        formatCurrency(item.remainingAmount) || 0,
-        item.note || "",
-      ]),
-    ];
-    const ws = XLSX.utils.aoa_to_sheet(worksheetData);
-    const wscols = [
-      { wch: 15 }, // mã hoá đơn
-      { wch: 40 }, // tên khách hàng/nhà cung cấp
-      { wch: 20 }, // ngày thanh toán
-      { wch: 15 }, // tổng tiền
-      { wch: 15 }, // đã trả
-      { wch: 15 }, // còn lại
-      { wch: 30 }, // ghi chú
-    ];
-    ws["!cols"] = wscols;
-    for (let col = 0; col < header.length; col++) {
-      const cellAddress = XLSX.utils.encode_cell({ r: 0, c: col });
-      if (!ws[cellAddress]) continue;
-      ws[cellAddress].s = {
-        font: { bold: true, color: { rgb: "000000" } },
-        alignment: { horizontal: "center", vertical: "center" },
-        fill: { fgColor: { rgb: "EEEEEE" } },
-        border: {
-          top: { style: "thin", color: { rgb: "000000" } },
-          bottom: { style: "thin", color: { rgb: "000000" } },
-          left: { style: "thin", color: { rgb: "000000" } },
-          right: { style: "thin", color: { rgb: "000000" } },
-        },
+
+    // Style Header (dòng 1)
+    const headerRow = sheet.getRow(1);
+    headerRow.eachCell((cell) => {
+      cell.font = { bold: true };
+      cell.alignment = {
+        vertical: "middle",
+        horizontal: "center",
+        wrapText: true,
       };
-    }
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "DanhSachHoaDon");
+      cell.fill = {
+        type: "pattern",
+        pattern: "solid",
+        fgColor: { argb: "FFEEEEEE" },
+      };
+      cell.border = {
+        top: { style: "thin" },
+        left: { style: "thin" },
+        bottom: { style: "thin" },
+        right: { style: "thin" },
+      };
+    });
+
+    // Ghi dữ liệu
+    data.forEach((item) => {
+      sheet.addRow({
+        id: item.id?.toString() || "",
+        name: item.name || "",
+        paymentDate: moment(item.paymentDate).format("HH:mm DD/MM/YYYY") || "",
+        totalAmount: formatCurrency(item.totalAmount) || 0,
+        paidAmount: formatCurrency(item.paidAmount) || 0,
+        remainingAmount: formatCurrency(item.remainingAmount) || 0,
+        note: item.note || "",
+      });
+    });
+
+    // Format từng dòng dữ liệu
+    sheet.eachRow((row, rowNumber) => {
+      if (rowNumber === 1) return; // bỏ qua header
+      row.eachCell((cell, colNumber) => {
+        // Căn trái cho tên, căn giữa cho những cột khác
+        const alignment =
+          colNumber === 2
+            ? { horizontal: "left", wrapText: true }
+            : { horizontal: "center" };
+        cell.alignment = { vertical: "middle", ...alignment };
+        cell.border = {
+          top: { style: "thin" },
+          left: { style: "thin" },
+          bottom: { style: "thin" },
+          right: { style: "thin" },
+        };
+      });
+    });
+
     const title =
       selectedTab === "1"
         ? "Danh_sach_tat_ca_hoa_don"
@@ -272,7 +295,13 @@ export default function useInvoiceHandler({
         : "Danh_sach_hoa_don_nha_cung_cap";
 
     const fileName = `${title}_${moment().format("YYYYMMDD_HHmmss")}.xlsx`;
-    XLSX.writeFile(wb, fileName);
+
+    workbook.xlsx.writeBuffer().then((buffer) => {
+      const blob = new Blob([buffer], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      });
+      saveAs(blob, fileName);
+    });
   };
 
   return {
