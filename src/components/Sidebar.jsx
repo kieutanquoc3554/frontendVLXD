@@ -15,6 +15,7 @@ import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { ThemeContext } from "../context/ThemeContext";
 import { FaMoneyBillWave } from "react-icons/fa";
+import { GiPayMoney } from "react-icons/gi";
 
 const { Sider } = Layout;
 
@@ -77,6 +78,7 @@ const Sidebar = () => {
         },
         {
           key: "9",
+          icon: <GiPayMoney />,
           label: <Link to="/debt">Công nợ</Link>,
         },
       ],
