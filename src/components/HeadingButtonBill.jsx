@@ -1,16 +1,32 @@
-import { Button, Flex, Input } from "antd";
+import { Button, Flex, Input, DatePicker } from "antd";
 import { BsFiletypePdf } from "react-icons/bs";
 import { RiFileExcel2Line } from "react-icons/ri";
 const { Search } = Input;
 
-const HeadingButtonBill = ({ onSearch, onExportPDF, handleExportExcel }) => {
+const HeadingButtonBill = ({
+  onSearch,
+  onExportPDF,
+  handleExportExcel,
+  setPaymentDate,
+  handleFilterInvoiceByDate,
+}) => {
   return (
     <Flex gap={10} align="center">
       <Search
-        placeholder="Tìm kiếm hoá đơn (theo mã hoá đơn, theo tên khách hàng, ngày thanh toán, mã tham chiếu)"
+        placeholder="Tìm kiếm hoá đơn (theo mã hoá đơn)"
         onSearch={onSearch}
         enterButton
       />
+      <>
+        <DatePicker
+          onChange={(date, dateString) => setPaymentDate(dateString)}
+          placeholder="Ngày thanh toán"
+          style={{ width: "20%" }}
+        />
+        <Button type="dashed" onClick={handleFilterInvoiceByDate}>
+          Tìm
+        </Button>
+      </>
       <Button
         type="primary"
         style={{ backgroundColor: "#AD0B00" }}

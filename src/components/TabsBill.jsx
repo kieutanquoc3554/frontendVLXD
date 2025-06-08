@@ -14,6 +14,9 @@ const TabsBill = () => {
     filteredCustomerInvoice,
     filteredSupplierInvoice,
     handleExportExcel,
+    handleFilterInvoiceByDate,
+    setPaymentDate,
+    filtered,
   } = useInvoiceHandler({
     selectedTab,
     invoice,
@@ -27,11 +30,14 @@ const TabsBill = () => {
         onSearch={handleSearch}
         onExportPDF={handleExportPDF}
         handleExportExcel={handleExportExcel}
+        setPaymentDate={setPaymentDate}
+        handleFilterInvoiceByDate={handleFilterInvoiceByDate}
       />
       <InvoiceTabs
         selectedTab={selectedTab}
         setSelectedTab={setSelectedTab}
         searchTerm={searchTerm}
+        filtered={filtered}
         filteredInvoice={filteredInvoice}
         filteredCustomerInvoice={filteredCustomerInvoice}
         filteredSupplierInvoice={filteredSupplierInvoice}

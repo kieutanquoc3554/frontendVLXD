@@ -18,6 +18,8 @@ export default function useInvoiceHandler({
   const [filteredInvoice, setFilteredInvoice] = useState([]);
   const [filteredCustomerInvoice, setFilteredCustomerInvoice] = useState([]);
   const [filteredSupplierInvoice, setFilteredSupplierInvoice] = useState([]);
+  const [paymentDate, setPaymentDate] = useState(null);
+  const [filtered, setFiltered] = useState(false);
   const { fetchInvoice } = useInvoice();
 
   const handleSearch = async (value) => {
@@ -306,6 +308,24 @@ export default function useInvoiceHandler({
     });
   };
 
+  const handleFilterInvoiceByDate = async () => {
+    setFiltered(true);
+    if (!paymentDate) {
+      message.error("Vui lòng chọn ngày thanh toán và thử lại!");
+      fetchInvoice();
+    }
+    try {
+      const response = await axios.get(
+        `http://localhost:5000/api/bill/filter?date=${paymentDate}`
+      );
+      setFilteredInvoice(response.data.all);
+      setFilteredCustomerInvoice(response.data.customer);
+      setFilteredSupplierInvoice(response.data.supplier);
+    } catch (error) {
+      console.error("Lỗi tìm kiếm:", error);
+    }
+  };
+
   return {
     handleSearch,
     handleExportPDF,
@@ -315,5 +335,9 @@ export default function useInvoiceHandler({
     filteredCustomerInvoice,
     filteredSupplierInvoice,
     handleExportExcel,
+    paymentDate,
+    setPaymentDate,
+    handleFilterInvoiceByDate,
+    filtered,
   };
 }
