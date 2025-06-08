@@ -54,7 +54,9 @@ export default function useInvoiceHandler({
   };
 
   const handleExportPDF = () => {
-    const data = getDataForSelectedTab();
+    const data = getDataForSelectedTab()
+      .slice()
+      .sort((a, b) => a.id - b.id);
 
     let title = "";
     if (selectedTab === "1") title = "Danh sách tất cả hóa đơn";
@@ -71,6 +73,7 @@ export default function useInvoiceHandler({
     // content
     const headers = [
       { text: "Mã hóa đơn", style: "tableHeader" },
+      { text: "Mã tham chiếu", style: "tableHeader" },
       { text: "Tên khách hàng/nhà cung cấp", style: "tableHeader" },
       { text: "Ngày thanh toán", style: "tableHeader" },
       { text: "Tổng tiền", style: "tableHeader" },
@@ -83,6 +86,7 @@ export default function useInvoiceHandler({
       headers,
       ...data.map((item) => [
         item.id?.toString() || "",
+        item.referenceId.toString() || "",
         item.name || "",
         moment(item.paymentDate).format("HH:mm DD/MM/YYYY") || "",
         formatCurrency(item.totalAmount) || "0",
@@ -161,7 +165,7 @@ export default function useInvoiceHandler({
           style: "tableExample",
           table: {
             headerRows: 1,
-            widths: ["auto", "*", "auto", "auto", "auto", "auto", "*"],
+            widths: ["auto", "auto", "*", "auto", "auto", "auto", "auto", "*"],
             body: body,
           },
           layout: {
