@@ -7,6 +7,7 @@ import DebtModal from "../components/DebtModal";
 import SupplierDebtModal from "../components/SupplierDebtModal";
 import useSupplierDebtHandler from "../hooks/handler/useSupplierDebtHandler";
 import useDetailSupplierDebt from "../hooks/api/useDetailSupplierDebt";
+import HeadingToolDebt from "../components/HeadingToolDebt";
 
 export default function Debt() {
   const {
@@ -25,6 +26,12 @@ export default function Debt() {
     handleUpdateDebt,
     handleSubmit,
     setPaymentMethod,
+    searchTerm,
+    setSearchTerm,
+    handleSearch,
+    filteredCustomerDebt,
+    filteredSupplierDebt,
+    isSearched,
   } = useDebtHandler({ detailDebt, fetchDebt, fetchViewDetails });
   const {
     selectedSupplierDebt,
@@ -41,11 +48,16 @@ export default function Debt() {
   return (
     <>
       <h2>Quản lý công nợ</h2>
+      <HeadingToolDebt setSearchTerm={setSearchTerm} onSearch={handleSearch} />
       <TabsDebt
         supplierDebt={supplierDebt}
         debt={debt}
         handleViewDetails={handleViewDetails}
         handleViewSupplierDebtDetails={handleViewSupplierDebtDetails}
+        searchTerm={searchTerm}
+        filteredCustomerDebt={filteredCustomerDebt}
+        filteredSupplierDebt={filteredSupplierDebt}
+        isSearched={isSearched}
       />
       <DebtModal
         isModalViewDetails={isModalViewDetails}
