@@ -50,17 +50,6 @@ const ColumnBill = () => {
       render: (note) => (!note ? "Không có ghi chú" : note),
     },
     { title: "Mã tham chiếu", dataIndex: "referenceId", key: "referenceId" },
-    {
-      title: "Xem chi tiết",
-      key: "action",
-      render: (record) => (
-        <>
-          <Button type="default" title="Xem chi tiết">
-            <GoChevronRight />
-          </Button>
-        </>
-      ),
-    },
   ];
 };
 

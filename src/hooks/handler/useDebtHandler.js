@@ -10,10 +10,6 @@ export default function useDebtHandler({
   const [editingDebt, setEditingDebt] = useState(false);
   const [amount, setAmount] = useState(0);
   const [paymentMethod, setPaymentMethod] = useState(null);
-  const [isSearched, setIsSearched] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [filteredCustomerDebt, setFilteredCustomerDebt] = useState([]);
-  const [filteredSupplierDebt, setFilteredSupplierDebt] = useState([]);
 
   useEffect(() => {
     if (detailDebt) {
@@ -48,30 +44,6 @@ export default function useDebtHandler({
     }
   };
 
-  const handleSearch = async () => {
-    setIsSearched(true);
-    try {
-      if (!searchTerm) {
-        return message.error("Không có từ khoá tìm kiếm");
-      }
-      const response = await axios.get(
-        `http://localhost:5000/api/debt/search/searchDebt?query=${searchTerm}`
-      );
-      setFilteredCustomerDebt(response.data.customer);
-      setFilteredSupplierDebt(response.data.supplier);
-    } catch (error) {
-      return message.error("Lỗi tìm kiếm", error);
-    }
-  };
-
-  useEffect(() => {
-    if (!searchTerm) {
-      setIsSearched(false);
-      setFilteredCustomerDebt([]);
-      setFilteredSupplierDebt([]);
-    }
-  }, [searchTerm]);
-
   return {
     handleUpdateDebt,
     handleSubmit,
@@ -80,11 +52,5 @@ export default function useDebtHandler({
     setEditingDebt,
     amount,
     setAmount,
-    searchTerm,
-    setSearchTerm,
-    handleSearch,
-    filteredCustomerDebt,
-    filteredSupplierDebt,
-    isSearched,
   };
 }

@@ -5,7 +5,11 @@ const ColumnActiveCategory = (handleDisable, handleEdit, handleSoftDelete) => {
     { title: "ID", dataIndex: "id", key: "id" },
     { title: "Tên danh mục", dataIndex: "name", key: "name" },
     { title: "Mô tả", dataIndex: "description", key: "description" },
-    { title: "Số lượng sản phẩm", dataIndex: "", key: "" },
+    {
+      title: "Số lượng sản phẩm",
+      dataIndex: "product_count",
+      key: "product_count",
+    },
     {
       title: "Tạm ẩn",
       dataIndex: "disabled",
