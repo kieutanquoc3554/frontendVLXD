@@ -10,16 +10,26 @@ const OrderTabs = ({
   fetchOrderById,
   fetchOrders,
   detailsOrder,
+  isSearched,
+  searchedOrder,
 }) => {
-  const pendingOrder = orders.filter((o) => o.status === "Pending");
-  const processingOrder = orders.filter((o) => o.status === "Processing");
-  const completedOrder = orders.filter((o) => o.status === "Completed");
-  const cancelledOrder = orders.filter((o) => o.status === "Cancelled");
+  const pendingOrder = isSearched
+    ? searchedOrder.filter((o) => o.status === "Pending")
+    : orders.filter((o) => o.status === "Pending");
+  const processingOrder = isSearched
+    ? searchedOrder.filter((o) => o.status === "Processing")
+    : orders.filter((o) => o.status === "Processing");
+  const completedOrder = isSearched
+    ? searchedOrder.filter((o) => o.status === "Completed")
+    : orders.filter((o) => o.status === "Completed");
+  const cancelledOrder = isSearched
+    ? searchedOrder.filter((o) => o.status === "Cancelled")
+    : orders.filter((o) => o.status === "Cancelled");
   return (
     <Tabs defaultActiveKey="1">
       <Tabs.TabPane tab="Tất cả đơn hàng" key="1">
         <Table
-          dataSource={orders}
+          dataSource={isSearched ? searchedOrder : orders}
           loading={isLoading}
           columns={ColumnOrders({
             form,
