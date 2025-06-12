@@ -20,6 +20,8 @@ const Order = () => {
     setSearchTerm,
     handleSearch,
     searchedOrder,
+    setOrderDate,
+    handleSearchByOrderDate,
   } = useOrderHandler(fetchOrders);
   const [form] = Form.useForm();
 
@@ -37,6 +39,8 @@ const Order = () => {
         <HeadingButtonOrder
           setSearchTerm={setSearchTerm}
           onSearch={handleSearch}
+          setOrderDate={setOrderDate}
+          onFilter={handleSearchByOrderDate}
         />
       </Flex>
       <OrderTabs

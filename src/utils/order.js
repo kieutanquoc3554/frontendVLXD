@@ -8,6 +8,15 @@ export const order = () => {
 
   const getColorLabel = (value) => status[value] || "FF4F4F";
 
+  const statusNormalization = {
+    Pending: "Đang chờ xử lý",
+    Processing: "Đang xử lý",
+    Completed: "Đã hoàn thành",
+    Cancelled: "Đã huỷ",
+  };
+
+  const getStatus = (value) => statusNormalization[value] || "Đang chờ xử lý";
+
   const paymentMethod = {
     Cash: "Tiền mặt",
     Banking: "Chuyển khoản",
@@ -23,5 +32,5 @@ export const order = () => {
     Cancelled: 0,
   };
 
-  return { getColorLabel, getPaymentMethod, statusPriority };
+  return { getColorLabel, getPaymentMethod, getStatus, statusPriority };
 };

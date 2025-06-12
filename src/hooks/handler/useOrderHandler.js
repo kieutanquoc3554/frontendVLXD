@@ -6,10 +6,19 @@ import { useEffect, useState } from "react";
 
 export const useOrderHandler = (fetchOrders) => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [orderDate, setOrderDate] = useState("");
   const [searchedOrder, setSearchedOrder] = useState([]);
   const [isSearched, setIsSearched] = useState(false);
   const { fetchOrderById } = useOrder();
   const { statusPriority } = order();
+
+  useEffect(() => {
+    if (!searchTerm || !orderDate) {
+      setIsSearched(false);
+      setSearchedOrder([]);
+    }
+  }, [searchTerm, orderDate]);
+
   const handleStatusChange = async (orderId, status) => {
     try {
       const order = await fetchOrderById(orderId);
@@ -54,12 +63,26 @@ export const useOrderHandler = (fetchOrders) => {
     }
   };
 
-  useEffect(() => {
-    if (!searchTerm) {
-      setIsSearched(false);
-      setSearchedOrder([]);
+  const handleSearchByOrderDate = async () => {
+    setIsSearched(true);
+    try {
+      if (!orderDate) {
+        message.error("Ngày đặt hàng trống!");
+        return;
+      }
+      const response = await axios.get(
+        `http://localhost:5000/api/orders/utils/search?query=${orderDate}`,
+        {
+          withCredentials: true,
+        }
+      );
+      setSearchedOrder(response.data);
+      message.success("Tìm kiếm thành công!");
+    } catch (error) {
+      console.log("Có lỗi tìm kiếm xảy ra: ", error);
+      message.error("Từ khoá tìm kiếm bị trống!");
     }
-  }, [searchTerm]);
+  };
 
   return {
     handleStatusChange,
@@ -67,5 +90,7 @@ export const useOrderHandler = (fetchOrders) => {
     setSearchTerm,
     handleSearch,
     searchedOrder,
+    setOrderDate,
+    handleSearchByOrderDate,
   };
 };
