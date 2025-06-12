@@ -11,7 +11,7 @@ const ColumnOrders = ({
   fetchOrderById,
   fetchOrders,
 }) => {
-  const { getColorLabel, getPaymentMethod } = order();
+  const { getColorLabel, getStatus } = order();
 
   const handleViewDetails = async (order) => {
     setIsDetailsModalOpen(true);
@@ -59,7 +59,9 @@ const ColumnOrders = ({
       title: "Trạng thái đơn hàng",
       dataIndex: "status",
       key: "status",
-      render: (value) => <Tag color={getColorLabel(value)}>{value}</Tag>,
+      render: (value) => (
+        <Tag color={getColorLabel(value)}>{getStatus(value)}</Tag>
+      ),
     },
     {
       title: "Tổng giá trị đơn hàng",
