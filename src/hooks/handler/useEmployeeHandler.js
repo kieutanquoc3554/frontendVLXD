@@ -9,6 +9,8 @@ const useEmployeeHandler = ({
   fetchEmployees,
   selectedEmployee,
 }) => {
+  const apiUrl = import.meta.env.VITE_API_URL;
+
   const handleAddEmployee = () => {
     setIsOpenModal(true);
     form.resetFields();
@@ -35,7 +37,7 @@ const useEmployeeHandler = ({
       async onOk() {
         try {
           const response = await axios.post(
-            `http://localhost:5000/api/auth/restore/${id}`,
+            `${apiUrl}/api/auth/restore/${id}`,
             {}
           );
           if (response.status === 200) {
@@ -54,7 +56,7 @@ const useEmployeeHandler = ({
   const handleDeleteEmployee = async (id) => {
     try {
       const response = await axios.post(
-        `http://localhost:5000/api/auth/delete/${id}`,
+        `${apiUrl}/api/auth/delete/${id}`,
         {},
         { withCredentials: true }
       );
@@ -73,12 +75,12 @@ const useEmployeeHandler = ({
     try {
       if (selectedEmployee) {
         await axios.post(
-          `http://localhost:5000/api/auth/update/${selectedEmployee.id}`,
+          `${apiUrl}/api/auth/update/${selectedEmployee.id}`,
           values
         );
         message.success("Cập nhật thông tin nhân viên thành công!");
       } else {
-        await axios.post(`http://localhost:5000/api/auth/register`, values);
+        await axios.post(`${apiUrl}/api/auth/register`, values);
         message.success("Tạo tài khoản thành công!");
       }
       fetchEmployees();

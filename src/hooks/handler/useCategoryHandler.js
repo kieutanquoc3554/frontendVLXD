@@ -10,6 +10,8 @@ export const useCategoryHandler = ({
   fetchCategories,
   setSearchTerm,
 }) => {
+  const apiUrl = import.meta.env.VITE_API_URL;
+
   const handleSearch = debounce((value) => {
     setSearchTerm(value);
   }, 300);
@@ -23,9 +25,9 @@ export const useCategoryHandler = ({
   const handleDisable = async (id, disabled) => {
     try {
       const { data: category } = await axios.get(
-        `http://localhost:5000/api/category/${id}`
+        `${apiUrl}/api/category/${id}`
       );
-      await axios.put(`http://localhost:5000/api/category/${id}`, {
+      await axios.put(`${apiUrl}/api/category/${id}`, {
         name: category.name,
         description: category.description,
         disabled,
@@ -49,9 +51,9 @@ export const useCategoryHandler = ({
       async onOk() {
         try {
           const { data: category } = await axios.get(
-            `http://localhost:5000/api/category/${id}`
+            `${apiUrl}/api/category/${id}`
           );
-          await axios.put(`http://localhost:5000/api/category/${id}`, {
+          await axios.put(`${apiUrl}/api/category/${id}`, {
             name: category.name,
             description: category.description,
             deleted: true,
@@ -69,9 +71,9 @@ export const useCategoryHandler = ({
   const handleRestoreCategories = async (id, disabled) => {
     try {
       const { data: category } = await axios.get(
-        `http://localhost:5000/api/category/${id}`
+        `${apiUrl}/api/category/${id}`
       );
-      await axios.put(`http://localhost:5000/api/category/${id}`, {
+      await axios.put(`${apiUrl}/api/category/${id}`, {
         name: category.name,
         description: category.description,
         deleted: false,
@@ -94,9 +96,7 @@ export const useCategoryHandler = ({
       cancelText: "Huỷ",
       async onOk() {
         try {
-          const { data } = await axios.delete(
-            `http://localhost:5000/api/category/${id}`
-          );
+          const { data } = await axios.delete(`${apiUrl}/api/category/${id}`);
           message.success(data.message);
           fetchCategories();
         } catch (error) {
@@ -116,12 +116,12 @@ export const useCategoryHandler = ({
     try {
       if (selectedCategory) {
         await axios.put(
-          `http://localhost:5000/api/category/${selectedCategory.id}`,
+          `${apiUrl}/api/category/${selectedCategory.id}`,
           values
         );
         message.success("Cập nhật danh mục thành công!");
       } else {
-        await axios.post("http://localhost:5000/api/category", values);
+        await axios.post(`${apiUrl}/api/category`, values);
         message.success("Thêm danh mục thành công!");
       }
       fetchCategories();

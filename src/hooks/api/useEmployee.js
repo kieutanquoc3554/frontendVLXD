@@ -5,11 +5,12 @@ export default function useEmployee() {
   const [isLoading, setIsLoading] = useState(false);
   const [employees, setEmployees] = useState([]);
   const [deletedEmployees, setDeletedEmployees] = useState([]);
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   const fetchEmployees = useCallback(async () => {
     try {
       setIsLoading(true);
-      const { data } = await axios.get("http://localhost:5000/api/auth");
+      const { data } = await axios.get(`${apiUrl}/api/auth`);
       setEmployees(data.filter((d) => !d.deleted));
       setDeletedEmployees(data.filter((d) => d.deleted));
     } catch (error) {

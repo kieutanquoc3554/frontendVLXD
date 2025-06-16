@@ -7,11 +7,12 @@ export default function useOrder() {
   const [isLoading, setIsLoading] = useState(false);
   const [orders, setOrders] = useState([]);
   const [detailsOrder, setDetailsOrder] = useState([]);
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   const fetchOrders = async () => {
     setIsLoading(true);
     try {
-      const { data } = await axios.get("http://localhost:5000/api/orders", {
+      const { data } = await axios.get(`${apiUrl}/api/orders`, {
         withCredentials: true,
       });
       setOrders(data);
@@ -25,12 +26,9 @@ export default function useOrder() {
   const fetchOrderById = async (id) => {
     setIsLoading(true);
     try {
-      const { data } = await axios.get(
-        `http://localhost:5000/api/orders/${id}`,
-        {
-          withCredentials: true,
-        }
-      );
+      const { data } = await axios.get(`${apiUrl}/api/orders/${id}`, {
+        withCredentials: true,
+      });
       setDetailsOrder(data);
       return data;
     } catch (error) {

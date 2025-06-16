@@ -21,6 +21,7 @@ export default function useInvoiceHandler({
   const [paymentDate, setPaymentDate] = useState(null);
   const [filtered, setFiltered] = useState(false);
   const { fetchInvoice } = useInvoice();
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   const handleSearch = async (value) => {
     setSearchTerm(value);
@@ -29,7 +30,7 @@ export default function useInvoiceHandler({
     }
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/bill/search?query=${value}`
+        `${apiUrl}/api/bill/search?query=${value}`
       );
       setFilteredInvoice(response.data.all);
       setFilteredCustomerInvoice(response.data.customer);
@@ -320,7 +321,7 @@ export default function useInvoiceHandler({
     }
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/bill/filter?date=${paymentDate}`
+        `${apiUrl}/api/bill/filter?date=${paymentDate}`
       );
       setFilteredInvoice(response.data.all);
       setFilteredCustomerInvoice(response.data.customer);

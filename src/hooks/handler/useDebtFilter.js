@@ -6,12 +6,13 @@ export default function useDebtFilter({ setIsSearched }) {
   const [date, setDate] = useState("");
   const [filteredCustomerByDate, setFilteredCustomerByDate] = useState([]);
   const [filteredSupplierByDate, setFilteredSupplierByDate] = useState([]);
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   const handleFilterByDate = async () => {
     setIsSearched(true);
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/debt/filter/bydate?date=${date}`
+        `${apiUrl}/api/debt/filter/bydate?date=${date}`
       );
       setFilteredCustomerByDate(response.data.customer);
       setFilteredSupplierByDate(response.data.supplier);

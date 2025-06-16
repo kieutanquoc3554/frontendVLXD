@@ -8,16 +8,17 @@ const InventoryStockCheckHistory = () => {
   const [session, setSession] = useState([]);
   const [details, setDetails] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/api/inventory/stock-check/all")
+      .get(`${apiUrl}/api/inventory/stock-check/all`)
       .then((res) => setSession(res.data));
   }, []);
 
   const handleViewDetails = (created_time, created_by) => {
     axios
-      .get("http://localhost:5000/api/inventory/stock-check/detail", {
+      .get(`${apiUrl}/api/inventory/stock-check/detail`, {
         params: { created_time, created_by },
       })
       .then((res) => {

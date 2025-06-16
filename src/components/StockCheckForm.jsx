@@ -5,6 +5,7 @@ import axios from "axios";
 const StockCheckForm = ({ data, loading }) => {
   const [quantities, setQuantities] = useState({});
   const [submitting, setSubmitting] = useState(false);
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   const handleChange = (value, product_id) => {
     setQuantities({ ...quantities, [product_id]: value });
@@ -25,13 +26,9 @@ const StockCheckForm = ({ data, loading }) => {
 
     try {
       setSubmitting(true);
-      await axios.post(
-        "http://localhost:5000/api/inventory/stock-check",
-        reportData,
-        {
-          withCredentials: true,
-        }
-      );
+      await axios.post(`${apiUrl}/api/inventory/stock-check`, reportData, {
+        withCredentials: true,
+      });
       message.success("Lập báo cáo kiểm kho thành công");
       setQuantities({});
     } catch (err) {

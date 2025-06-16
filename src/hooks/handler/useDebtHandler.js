@@ -10,6 +10,7 @@ export default function useDebtHandler({
   const [editingDebt, setEditingDebt] = useState(false);
   const [amount, setAmount] = useState(0);
   const [paymentMethod, setPaymentMethod] = useState(null);
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     if (detailDebt) {
@@ -29,7 +30,7 @@ export default function useDebtHandler({
       }
       const amount_customer = parseFloat(amount);
       const response = await axios.post(
-        `http://localhost:5000/api/debt/update/${detailDebt.id}`,
+        `${apiUrl}/api/debt/update/${detailDebt.id}`,
         {
           id: detailDebt.id,
           amount: amount_customer,

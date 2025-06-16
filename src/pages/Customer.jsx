@@ -11,6 +11,7 @@ export default function Customer() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [form] = Form.useForm();
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     fetchCustomers();
@@ -19,7 +20,7 @@ export default function Customer() {
   const fetchCustomers = async () => {
     try {
       setIsLoading(true);
-      const { data } = await axios.get("http://localhost:5000/api/customer");
+      const { data } = await axios.get(`${apiUrl}/api/customer`);
       setCustomers(data.filter((customer) => !customer.deleted));
       setDeletedCustomers(data.filter((customer) => customer.deleted));
     } catch (error) {
@@ -51,9 +52,7 @@ export default function Customer() {
       cancelText: "Huỷ ",
       async onOk() {
         try {
-          const response = await axios.delete(
-            `http://localhost:5000/api/customer/${id}`
-          );
+          const response = await axios.delete(`${apiUrl}/api/customer/${id}`);
           if (response.status === 200) {
             message.success("Xoá thành công!");
             fetchCustomers();
@@ -69,10 +68,7 @@ export default function Customer() {
 
   const handleRestoreCustomer = async (id) => {
     try {
-      const { data } = await axios.post(
-        `http://localhost:5000/api/customer/${id}`,
-        {}
-      );
+      const { data } = await axios.post(`${apiUrl}/api/customer/${id}`, {});
       message.info(data.message);
       fetchCustomers();
     } catch (error) {
@@ -84,15 +80,12 @@ export default function Customer() {
     try {
       if (selectedCustomer) {
         await axios.put(
-          `http://localhost:5000/api/customer/${selectedCustomer.id}`,
+          `${apiUrl}/api/customer/${selectedCustomer.id}`,
           values
         );
         message.success("Cập nhật thông tin người dùng thành công!");
       } else {
-        const response = await axios.post(
-          "http://localhost:5000/api/customer",
-          values
-        );
+        const response = await axios.post(`${apiUrl}/api/customer`, values);
         if (response.status === 200) {
           message.success("Thêm khách hàng mới thành công!");
         }

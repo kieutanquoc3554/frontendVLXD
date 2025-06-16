@@ -26,6 +26,7 @@ export default function AddProductFormModal({
   const [categories, setCategories] = useState([]);
   const [suppliers, setSuppliers] = useState([]);
   const [form] = Form.useForm();
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     fetchCategories();
@@ -59,7 +60,7 @@ export default function AddProductFormModal({
 
   const fetchCategories = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/api/category");
+      const response = await axios.get(`${apiUrl}/api/category`);
       const options = response.data.map((categories) => ({
         label: categories.name,
         value: categories.id,
@@ -72,7 +73,7 @@ export default function AddProductFormModal({
 
   const fetchSuppliers = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/api/supplier");
+      const response = await axios.get(`${apiUrl}/api/supplier`);
       const options = response.data.map((res) => ({
         label: res.name,
         value: res.id,
@@ -88,13 +89,9 @@ export default function AddProductFormModal({
     formData.append("image", file);
     setUploading(true);
     try {
-      const response = await axios.post(
-        "http://localhost:5000/upload",
-        formData,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-        }
-      );
+      const response = await axios.post(`${apiUrl}/upload`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
       if (response.data.success) {
         setImageUrl(response.data.url);
         form.setFieldsValue({ image_url: response.data.url });
@@ -116,7 +113,7 @@ export default function AddProductFormModal({
       setSubmitting(true);
       if (selectedProduct) {
         const response = await axios.put(
-          `http://localhost:5000/api/products/${selectedProduct.id}`,
+          `${apiUrl}/api/products/${selectedProduct.id}`,
           values,
           {
             withCredentials: true,
@@ -124,10 +121,7 @@ export default function AddProductFormModal({
         );
         message.success(response.data.message);
       } else {
-        const response = await axios.post(
-          "http://localhost:5000/api/products",
-          values
-        );
+        const response = await axios.post(`${apiUrl}/api/products`, values);
         message.success(response.data.message);
       }
       onClose(true);

@@ -7,11 +7,12 @@ export default function useInvoice() {
   const [customerInvoice, setCustomerInvoice] = useState([]);
   const [supplierInvoice, setSupplierInvoice] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   const fetchInvoice = async () => {
     try {
       setIsLoading(true);
-      const invoiceResponse = await axios.get("http://localhost:5000/api/bill");
+      const invoiceResponse = await axios.get(`${apiUrl}/api/bill`);
       setInvoice(invoiceResponse.data);
       setCustomerInvoice(
         invoiceResponse.data.filter((i) => i.type === "customer")

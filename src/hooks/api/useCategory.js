@@ -8,11 +8,12 @@ export default function useCategory() {
   const [searchTerm, setSearchTerm] = useState(null);
   const [categories, setCategories] = useState([]);
   const [deletedCategories, setDeletedCategories] = useState([]);
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   const fetchCategories = async () => {
     setLoading(true);
     try {
-      const { data } = await axios.get("http://localhost:5000/api/category");
+      const { data } = await axios.get(`${apiUrl}/api/category`);
       let active = data.filter((cat) => !cat.deleted);
       let deleted = data.filter((cat) => cat.deleted);
       if (filter !== null) {

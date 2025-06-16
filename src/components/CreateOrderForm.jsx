@@ -10,9 +10,10 @@ const CreateOrderForm = ({ onSuccess }) => {
   const [selectedItems, setSelectedItems] = useState([]);
   const { products } = useProduct("active");
   const [paymentMethod, setPaymentMethod] = useState("Cash");
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   const fetchCustomer = async () => {
-    const { data } = await axios.get("http://localhost:5000/api/customer");
+    const { data } = await axios.get(`${apiUrl}/api/customer`);
     setCustomer(data);
   };
 
@@ -51,7 +52,7 @@ const CreateOrderForm = ({ onSuccess }) => {
         payment_method: paymentMethod,
         paid_amount: paid_amount || total,
       };
-      await axios.post("http://localhost:5000/api/orders", payload, {
+      await axios.post(`${apiUrl}/api/orders`, payload, {
         withCredentials: true,
       });
       message.success("Tạo đơn hàng thành công!");

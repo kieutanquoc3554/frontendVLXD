@@ -11,6 +11,7 @@ export const useOrderHandler = (fetchOrders) => {
   const [isSearched, setIsSearched] = useState(false);
   const { fetchOrderById } = useOrder();
   const { statusPriority } = order();
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     if (!searchTerm || !orderDate) {
@@ -33,7 +34,7 @@ export const useOrderHandler = (fetchOrders) => {
         return;
       }
       await axios.put(
-        `http://localhost:5000/api/orders/${orderId}/status`,
+        `${apiUrl}/api/orders/${orderId}/status`,
         { status },
         {
           withCredentials: true,
@@ -50,7 +51,7 @@ export const useOrderHandler = (fetchOrders) => {
     setIsSearched(true);
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/orders/utils/search?query=${searchTerm}`,
+        `${apiUrl}/api/orders/utils/search?query=${searchTerm}`,
         {
           withCredentials: true,
         }
@@ -71,7 +72,7 @@ export const useOrderHandler = (fetchOrders) => {
         return;
       }
       const response = await axios.get(
-        `http://localhost:5000/api/orders/utils/search?query=${orderDate}`,
+        `${apiUrl}/api/orders/utils/search?query=${orderDate}`,
         {
           withCredentials: true,
         }

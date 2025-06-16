@@ -12,6 +12,7 @@ const ColumnOrders = ({
   fetchOrders,
 }) => {
   const { getColorLabel, getStatus } = order();
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   const handleViewDetails = async (order) => {
     setIsDetailsModalOpen(true);
@@ -33,7 +34,7 @@ const ColumnOrders = ({
       async onOk() {
         try {
           const response = await axios.put(
-            `http://localhost:5000/api/orders/${order.id}/cancel`,
+            `${apiUrl}/api/orders/${order.id}/cancel`,
             {},
             {
               withCredentials: true,
@@ -43,7 +44,9 @@ const ColumnOrders = ({
             message.success(response.data.message);
             await fetchOrders();
           }
-        } catch (error) {}
+        } catch (error) {
+          console.log(error);
+        }
       },
     });
   };

@@ -8,6 +8,8 @@ const useSuppliersHandler = ({
   setIsModalOpen,
   fetchSuppliers,
 }) => {
+  const apiUrl = import.meta.env.VITE_API_URL;
+
   const handleAddSupplier = () => {
     setSelectedSupplier(null);
     form.resetFields();
@@ -24,12 +26,12 @@ const useSuppliersHandler = ({
     try {
       if (selectedSupplier) {
         await axios.put(
-          `http://localhost:5000/api/supplier/${selectedSupplier.id}`,
+          `${apiUrl}/api/supplier/${selectedSupplier.id}`,
           values
         );
         message.success("Cập nhật danh mục thành công!");
       } else {
-        await axios.post("http://localhost:5000/api/supplier", values);
+        await axios.post(`${apiUrl}/api/supplier`, values);
         message.success("Thêm cung cấp thành công!");
       }
       fetchSuppliers();
@@ -50,7 +52,7 @@ const useSuppliersHandler = ({
         cancelText: "Huỷ",
         async onOk() {
           try {
-            await axios.post(`http://localhost:5000/api/supplier/${id}`, {});
+            await axios.post(`${apiUrl}/api/supplier/${id}`, {});
             message.success("Đã xoá nhà cung cấp");
             fetchSuppliers();
           } catch (error) {
@@ -65,7 +67,7 @@ const useSuppliersHandler = ({
 
   const handleRestore = async (id) => {
     try {
-      await axios.post(`http://localhost:5000/api/supplier/restore/${id}`, {});
+      await axios.post(`${apiUrl}/api/supplier/restore/${id}`, {});
       message.success("Đã khôi phục thành công");
       fetchSuppliers();
     } catch (error) {

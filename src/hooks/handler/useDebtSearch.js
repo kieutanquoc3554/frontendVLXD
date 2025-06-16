@@ -7,6 +7,7 @@ export default function useDebtSearch() {
   const [filteredCustomerDebt, setFilteredCustomerDebt] = useState([]);
   const [filteredSupplierDebt, setFilteredSupplierDebt] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   const handleSearch = async () => {
     setIsSearched(true);
@@ -15,7 +16,7 @@ export default function useDebtSearch() {
         return message.error("Không có từ khoá tìm kiếm");
       }
       const response = await axios.get(
-        `http://localhost:5000/api/debt/search/searchDebt?query=${searchTerm}`
+        `${apiUrl}/api/debt/search/searchDebt?query=${searchTerm}`
       );
       setFilteredCustomerDebt(response.data.customer);
       setFilteredSupplierDebt(response.data.supplier);

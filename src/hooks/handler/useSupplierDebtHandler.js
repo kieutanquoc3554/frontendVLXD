@@ -11,6 +11,7 @@ export default function useSupplierDebtHandler() {
   const [isOpenDetailDebtModal, setIsOpenDetailDebtModal] = useState(false);
   const [isOpenPaySupplierDebt, setIsOpenPaySupplierDebt] = useState(false);
   const [paymentAmount, setPaymentAmount] = useState("");
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   const handleViewSupplierDebtDetails = (sup_debt) => {
     console.log(sup_debt);
@@ -32,7 +33,7 @@ export default function useSupplierDebtHandler() {
 
     try {
       const response = await axios.post(
-        `http://localhost:5000/api/debt/updateSupplier/${details.id}`,
+        `${apiUrl}/api/debt/updateSupplier/${details.id}`,
         {
           amount: Number(paymentAmount),
         }

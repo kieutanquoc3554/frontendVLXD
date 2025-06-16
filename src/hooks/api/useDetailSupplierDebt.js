@@ -3,12 +3,13 @@ import { useEffect, useState } from "react";
 
 export default function useDetailSupplierDebt(selectedSupplierDebt) {
   const [detailSupplierDebt, setDetailSupplierDebt] = useState({});
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   const fetchSupplierDebtDetail = async () => {
     try {
       if (selectedSupplierDebt?.id) {
         const response = await axios.get(
-          `http://localhost:5000/api/debt/supplier-debts/${selectedSupplierDebt.id}`
+          `${apiUrl}/api/debt/supplier-debts/${selectedSupplierDebt.id}`
         );
         setDetailSupplierDebt(response.data);
       }

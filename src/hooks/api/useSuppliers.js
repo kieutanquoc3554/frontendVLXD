@@ -6,11 +6,12 @@ export default function useSuppliers() {
   const [loading, setLoading] = useState(false);
   const [suppliers, setSuppliers] = useState([]);
   const [deletedSuppliers, setDeletedSuppliers] = useState([]);
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   const fetchSuppliers = async () => {
     setLoading(true);
     try {
-      const { data } = await axios.get("http://localhost:5000/api/supplier/");
+      const { data } = await axios.get(`${apiUrl}/api/supplier/`);
       setSuppliers(data.filter((supplier) => !supplier.deleted));
       setDeletedSuppliers(data.filter((supplier) => supplier.deleted));
     } catch (error) {

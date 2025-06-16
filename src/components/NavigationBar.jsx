@@ -11,11 +11,12 @@ const NavigationBar = () => {
   const { theme, toggleTheme } = useContext(ThemeContext);
   const [username, setUsername] = useState("");
   const navigate = useNavigate();
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/auth/user", {
+        const res = await axios.get(`${apiUrl}/api/auth/user`, {
           withCredentials: true,
         });
         setUsername(res.data.name);
@@ -29,7 +30,7 @@ const NavigationBar = () => {
   const handleLogout = async () => {
     try {
       await axios.post(
-        "http://localhost:5000/api/auth/logout",
+        `${apiUrl}/api/auth/logout`,
         {},
         { withCredentials: true }
       );

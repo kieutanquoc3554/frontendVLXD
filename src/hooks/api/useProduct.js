@@ -5,11 +5,14 @@ import axios from "axios";
 export default function useProduct(tabKey) {
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const apiUrl = import.meta.env.VITE_API_URL;
+
+  console.log(apiUrl);
 
   const fetchProducts = async () => {
     try {
       setIsLoading(true);
-      const { data } = await axios.get("http://localhost:5000/api/products");
+      const { data } = await axios.get(`${apiUrl}/api/products`);
       const filtered = data.filter((p) => {
         if (tabKey === "active") return !p.isDeleted && !p.disabled;
         if (tabKey === "hidden") return p.disabled;

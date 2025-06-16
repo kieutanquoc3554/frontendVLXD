@@ -9,6 +9,8 @@ export const useProductHandler = ({
   refetch,
   setCategories,
 }) => {
+  const apiUrl = import.meta.env.VITE_API_URL;
+
   const handleUpdate = (product) => {
     setOpenAddModal(true);
     setSelectedProduct(product);
@@ -24,7 +26,7 @@ export const useProductHandler = ({
       async onOk() {
         try {
           const response = await axios.put(
-            `http://localhost:5000/api/products/hide/${id}`,
+            `${apiUrl}/api/products/hide/${id}`,
             {}
           );
           message.success(response.data.message);
@@ -40,7 +42,7 @@ export const useProductHandler = ({
     try {
       if (user.role === "Admin") {
         const response = await axios.put(
-          `http://localhost:5000/api/products/delete/${id}`,
+          `${apiUrl}/api/products/delete/${id}`,
           {}
         );
         message.success(response.data.message);

@@ -10,13 +10,14 @@ export default function useInventory() {
   const [editingItem, setEditingItem] = useState(null);
   const [searchKey, setSearchKey] = useState("");
   const [form] = Form.useForm();
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   const fetchInventory = async (keyword) => {
     try {
       setIsLoading(true);
       const url = keyword
-        ? `http://localhost:5000/api/inventory/search/keyword?q=${keyword}`
-        : "http://localhost:5000/api/inventory";
+        ? `${apiUrl}/api/inventory/search/keyword?q=${keyword}`
+        : `${apiUrl}/api/inventory`;
       const response = await axios.get(url);
       setInventory(response.data);
     } catch (error) {
@@ -29,9 +30,7 @@ export default function useInventory() {
   const fetchInventoryLogs = async () => {
     try {
       setIsLoading(true);
-      const response = await axios.get(
-        "http://localhost:5000/api/inventory/history/logs"
-      );
+      const response = await axios.get(`${apiUrl}/api/inventory/history/logs`);
       setInventoryLogs(response.data);
     } catch (error) {
       message.error("Lỗi khi tải dữ liệu lịch sử kho hàng", error);
@@ -44,7 +43,7 @@ export default function useInventory() {
     try {
       setIsLoading(true);
       const response = await axios.get(
-        "http://localhost:5000/api/inventory/import_slips/all"
+        `${apiUrl}/api/inventory/import_slips/all`
       );
       setImportSlips(response.data.import_slips);
     } catch (error) {
@@ -74,14 +73,12 @@ export default function useInventory() {
     try {
       const values = await form.validateFields();
       if (editingItem?.id) {
-        await axios.put(
-          `http://localhost:5000/api/inventory/${editingItem.id}`,
-          values,
-          { withCredentials: true }
-        );
+        await axios.put(`${apiUrl}/api/inventory/${editingItem.id}`, values, {
+          withCredentials: true,
+        });
         message.success("Cập nhật thành công!");
       } else {
-        await axios.post("http://localhost:5000/api/inventory", values, {
+        await axios.post(`${apiUrl}/api/inventory`, values, {
           withCredentials: true,
         });
         message.success("Thêm vào kho thành công!");
@@ -98,7 +95,7 @@ export default function useInventory() {
 
   const handleSubmit = async (values) => {
     try {
-      await axios.post("http://localhost:5000/api/inventory", values, {
+      await axios.post(`${apiUrl}/api/inventory`, values, {
         withCredentials: true,
       });
       message.success("Lưu phiếu nhập kho thành công");

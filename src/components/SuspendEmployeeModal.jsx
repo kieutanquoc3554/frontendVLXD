@@ -14,6 +14,7 @@ import dayjs from "dayjs";
 export default function SuspendEmployeeModal({ open, onClose, employee }) {
   const [form] = Form.useForm();
   const [suspendType, setSuspendType] = useState("permanent");
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   const handleSubmit = async () => {
     try {
@@ -29,10 +30,7 @@ export default function SuspendEmployeeModal({ open, onClose, employee }) {
       } else if (suspendType === "date") {
         payload.suspended_until = values.date.format("YYYY-MM-DD");
       }
-      await axios.put(
-        `http://localhost:5000/api/auth/suspend/${employee.id}`,
-        payload
-      );
+      await axios.put(`${apiUrl}/api/auth/suspend/${employee.id}`, payload);
       message.success("Đã đình chỉ nhân viên");
       onClose(true);
     } catch (error) {
