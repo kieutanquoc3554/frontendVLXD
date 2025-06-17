@@ -25,20 +25,20 @@ function App() {
     <ThemeProvider>
       <Router>
         <Routes>
-          {/* <Route path="/" element={<ProtectedRoutes />}>
-          </Route> */}
-          <Route path="/" element={<Layout />}>
-            <Route path="products" element={<Product />}></Route>
-            <Route path="categories" element={<Categories />}></Route>
-            <Route path="suppliers" element={<Suppliers />}></Route>
-            <Route path="customer" element={<Customer />}></Route>
-            <Route path="inventory" element={<Inventory />}></Route>
-            <Route path="employee" element={<Employee />}></Route>
-            <Route path="order" element={<Order />}></Route>
-            <Route path="cat" element={<Cat />}></Route>
-            <Route path="debt" element={<Debt />}></Route>
-            <Route path="bill" element={<Bill />}></Route>
-            <Route index element={<Navigate to="/products" />} />
+          <Route path="/" element={<ProtectedRoutes />}>
+            <Route path="/" element={<Layout />}>
+              <Route path="products" element={<Product />}></Route>
+              <Route path="categories" element={<Categories />}></Route>
+              <Route path="suppliers" element={<Suppliers />}></Route>
+              <Route path="customer" element={<Customer />}></Route>
+              <Route path="inventory" element={<Inventory />}></Route>
+              <Route path="employee" element={<Employee />}></Route>
+              <Route path="order" element={<Order />}></Route>
+              <Route path="cat" element={<Cat />}></Route>
+              <Route path="debt" element={<Debt />}></Route>
+              <Route path="bill" element={<Bill />}></Route>
+              <Route index element={<Navigate to="/products" />} />
+            </Route>
           </Route>
           <Route path="/login" element={<LoginPage />} />
         </Routes>
